@@ -1,0 +1,18 @@
+<header class="header">
+  <div class="container header-container">
+    <a routerLink="/" class="logo">Recipe Book</a>
+
+    <nav class="nav">
+      <ng-container *ngIf="isLoggedIn; else notLoggedIn">
+        <a routerLink="/recipes" routerLinkActive="active">My Recipes</a>
+        <a routerLink="/recipes-forum" routerLinkActive="active">Recipe Forum</a>
+        <button class="logout-btn" (click)="onLogout()">Logout</button>
+      </ng-container>
+
+      <ng-template #notLoggedIn>
+        <a routerLink="/login" routerLinkActive="active">Login</a>
+        <a routerLink="/register" routerLinkActive="active">Register</a>
+      </ng-template>
+    </nav>
+  </div>
+</header>

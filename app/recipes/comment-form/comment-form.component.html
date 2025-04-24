@@ -1,0 +1,22 @@
+<div class="comment-form-container">
+    <h4 class="form-title">Add a Comment</h4>
+
+    <div *ngIf="errorMessage" class="form-error">
+        {{ errorMessage }}
+    </div>
+
+    <div class="comment-input-group">
+        <textarea class="comment-textarea" placeholder="Write your comment here..." [(ngModel)]="commentContent"
+            [disabled]="isSubmitting">
+      </textarea>
+    </div>
+
+    <div class="form-actions">
+        <button class="cancel-btn" (click)="cancelComment()" [disabled]="isSubmitting">
+            Cancel
+        </button>
+        <button class="submit-btn" (click)="submitComment()" [disabled]="isSubmitting || !commentContent.trim()">
+            {{ isSubmitting ? 'Posting...' : 'Post Comment' }}
+        </button>
+    </div>
+</div>

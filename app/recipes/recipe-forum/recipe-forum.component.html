@@ -1,0 +1,94 @@
+<div class="recipe-feed-container">
+    <h1>Recipe Forum</h1>
+
+    <div class="categories-container" *ngIf="recipes.length > 0">
+        <div class="categories">
+            <span>Categories:</span>
+            <div class="category-pills">
+                <button *ngFor="let category of categories" class="category-pill"
+                    [class.active]="selectedCategory === category" (click)="onCategoryChange(category)">
+                    {{ category | titlecase }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="isLoading" class="loading-state">
+        <p>Loading recipes...</p>
+    </div>
+
+    <div *ngIf="!isLoading && errorMessage" class="error-state">
+        <p>{{ errorMessage }}</p>
+    </div>
+
+    <div *ngIf="!isLoading && !errorMessage && recipes.length === 0" class="empty-state">
+        <div class="empty-state-content">
+            <h3>No recipes yet</h3>
+            <p>Add your first recipe or follow other users to see their recipes!</p>
+            <button class="primary-btn" (click)="onAddRecipe()">Add Recipe</button>
+        </div>
+    </div>
+
+    <div *ngIf="!isLoading && !errorMessage && filteredRecipes.length === 0 && recipes.length > 0" class="empty-state">
+        <div class="empty-state-content">
+            <h3>No recipes in this category</h3>
+            <p>Try selecting a different category or add a new recipe.</p>
+        </div>
+    </div>
+
+    <div *ngIf="!isLoading && filteredRecipes.length > 0" class="recipe-grid">
+        <div *ngFor="let recipe of filteredRecipes" class="recipe-card">
+            <div class="recipe-image"
+                [ngStyle]="{'background-image': recipe.image ? 'url(' + recipe.image + ')' : 'url(https://via.placeholder.com/300x200/e57373/ffffff?text=Recipe)'}"
+                (click)="navigateToRecipe(recipe.id)">
+                <span class="recipe-category">{{ recipe.category }}</span>
+            </div>
+
+            <div class="recipe-content">
+                <div class="recipe-header">
+                    <h3 (click)="navigateToRecipe(recipe.id)">{{ recipe.title }}</h3>
+                    <p class="recipe-author">by {{ recipe.created_by_username }}</p>
+                </div>
+
+                <p class="recipe-description">
+                    {{ recipe.description | slice:0:100 }}{{ recipe.description.length > 100 ? '...' : '' }}
+                </p>
+
+                <div class="recipe-meta">
+                    <div class="recipe-stats">
+                        <span class="cooking-time"><i class="time-icon">⏱</i> {{ recipe.cooking_time }} min</span>
+                        <span class="servings"><i class="servings-icon">👥</i> {{ recipe.servings }} servings</span>
+                    </div>
+
+                    <div class="recipe-interactions">
+                        <button class="like-btn" [class.liked]="recipe.is_liked" (click)="toggleLike(recipe, $event)">
+                            <i class="heart-icon">{{ recipe.is_liked ? '❤️' : '🤍' }}</i>
+                            <span>{{ recipe.likes_count }}</span>
+                        </button>
+
+                        <button class="comment-btn" [class.active]="expandedRecipeId === recipe.id"
+                            (click)="toggleComments(recipe.id, $event)">
+                            <i class="comment-icon">💬</i>
+                            <span>{{ recipe.comments_count }}</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="comments-section" *ngIf="expandedRecipeId === recipe.id">
+                <app-comment-list [recipeId]="recipe.id"></app-comment-list>
+
+                <div class="add-comment-container">
+                    <button class="add-comment-btn" *ngIf="commentingOnRecipe !== recipe.id"
+                        (click)="startCommenting(recipe.id, $event)">
+                        <i class="comment-add-icon">+</i> Add Comment
+                    </button>
+
+                    <app-comment-form *ngIf="commentingOnRecipe === recipe.id" [recipeId]="recipe.id"
+                        (commentAdded)="onCommentAdded(recipe.id)">
+                    </app-comment-form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

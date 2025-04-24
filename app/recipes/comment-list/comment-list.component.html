@@ -1,0 +1,31 @@
+<!-- comment-list.component.html -->
+<div class="comments-container">
+    <h4 class="comments-title">Comments ({{ comments.length }})</h4>
+
+    <div *ngIf="isLoading" class="comments-loading">
+        Loading comments...
+    </div>
+
+    <div *ngIf="errorMessage" class="comments-error">
+        {{ errorMessage }}
+    </div>
+
+    <div *ngIf="!isLoading && !errorMessage && comments.length === 0" class="comments-empty">
+        No comments yet. Be the first to comment!
+    </div>
+
+    <div *ngIf="!isLoading && comments.length > 0" class="comments-list">
+        <div *ngFor="let comment of comments" class="comment-item">
+            <div class="comment-header">
+                <div class="comment-author">
+                    <span class="author-name">{{ comment.user_name }}</span>
+                </div>
+                <span class="comment-time">{{ getTimeAgo(comment.created_at) }}</span>
+            </div>
+
+            <div class="comment-content">
+                {{ comment.content }}
+            </div>
+        </div>
+    </div>
+</div>

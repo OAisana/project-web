@@ -1,0 +1,76 @@
+<div class="recipe-detail-container fade-in">
+  <button class="back-btn" (click)="goBack()">← Back to Recipes</button>
+
+  <div *ngIf="isLoading" class="loading-state">
+    <p>Loading recipe...</p>
+  </div>
+
+  <div *ngIf="!isLoading && errorMessage" class="error-state">
+    <p>{{ errorMessage }}</p>
+    <button class="primary-btn" (click)="goBack()">Return to Recipes</button>
+  </div>
+
+  <div *ngIf="!isLoading && !errorMessage && recipe" class="recipe-detail">
+    <div class="recipe-header">
+      <div class="recipe-title-container">
+        <h1>{{ recipe.title }}</h1>
+        <span class="recipe-category">{{ recipe.category }}</span>
+      </div>
+      
+      <div class="recipe-actions" *ngIf="isOwner">
+        <button class="secondary-btn" (click)="onEdit()">Edit</button>
+        <button class="delete-btn" (click)="onDelete()">Delete</button>
+      </div>
+    </div>
+
+    <div class="recipe-image" [ngStyle]="{'background-image': recipe.image ? 'url(' + recipe.image + ')' : 'url(https://via.placeholder.com/800x400/e57373/ffffff?text=Recipe)'}">
+    </div>
+
+    <div class="recipe-meta-info">
+      <div class="meta-item">
+        <span class="meta-icon">⏱</span>
+        <div>
+          <h4>Cooking Time</h4>
+          <p>{{ recipe.cooking_time }} minutes</p>
+        </div>
+      </div>
+      <div class="meta-item">
+        <span class="meta-icon">👥</span>
+        <div>
+          <h4>Servings</h4>
+          <p>{{ recipe.servings }} people</p>
+        </div>
+      </div>
+      <div class="meta-item">
+        <span class="meta-icon">🗓️</span>
+        <div>
+          <h4>Created</h4>
+          <p>{{ recipe.created_at | date }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="recipe-description">
+      <h2>Description</h2>
+      <p>{{ recipe.description }}</p>
+    </div>
+
+    <div class="recipe-content-columns">
+      <div class="ingredients-section">
+        <h2>Ingredients</h2>
+        <ul class="ingredients-list">
+          <li *ngFor="let ingredient of recipe.ingredients">
+            {{ ingredient }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="instructions-section">
+        <h2>Instructions</h2>
+        <div class="instructions-content">
+          {{ recipe.instructions }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
